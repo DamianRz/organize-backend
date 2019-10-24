@@ -1,0 +1,35 @@
+{
+  "name": "backend-crud",
+  "version": "1.0.0",
+  "main": "dist/organize/app",
+  "scripts": {
+    "serve": "tsc -p tsconfig.json && node organize/app.js",
+    "tsc": "tsc",
+    "dev": "concurrently \"tsc -w\" \"nodemon ./build/organize/app.js\""
+  },
+  "repository": "",
+  "license": "MIT",
+  "dependencies": {
+    "@hapi/joi": "^15.0.3",
+    "@types/express": "^4.16.1",
+    "@types/node": "^12.0.7",
+    "bcryptjs": "^2.4.3",
+    "cassandra-driver": "^4.1.0",
+    "chalk": "^2.4.2",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-joi-validation": "^0.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.17.1",
+    "node": "^12.2.0",
+    "socket.io": "^2.3.0",
+    "typescript": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.6",
+    "@types/socket.io": "^2.1.4",
+    "concurrently": "^5.0.0",
+    "nodemon": "^1.19.3"
+  }
+}
