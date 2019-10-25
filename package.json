@@ -1,11 +1,11 @@
 {
   "name": "backend-crud",
   "version": "1.0.0",
-  "main": "dist/organize/app",
+  "main": "dist/src/app",
   "scripts": {
-    "serve": "tsc -p tsconfig.json && node organize/app.js",
+    "serve": "tsc -p tsconfig.json && node src/app.js",
     "tsc": "tsc",
-    "dev": "concurrently \"tsc -w\" \"nodemon ./build/organize/app.js\""
+    "dev": "concurrently \"tsc -w\" \"nodemon ./dist/src/app.js\""
   },
   "repository": "",
   "license": "MIT",
@@ -18,7 +18,9 @@
     "chalk": "^2.4.2",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "express-graphql": "^0.9.0",
     "express-joi-validation": "^0.3.0",
+    "graphql": "^14.5.8",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.17.1",
     "node": "^12.2.0",
