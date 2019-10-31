@@ -1,8 +1,8 @@
 import Question from '../models/Question';
 import QuestionList from '../models/QuestionList';
 import ResultObject from '../models/ResultObject';
-import QueryFunctions from '../Queries/QueryFunctions';
-import Queries from '../Queries/Queries';
+import QueryFunctions from '../queries/QueryFunctions';
+import Queries from '../queries/Queries';
 
 export default class QuestionRepository {
   private queryFunctions: QueryFunctions = new QueryFunctions();

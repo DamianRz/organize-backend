@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import QuestionnaireService from '../services/QuestionnaireService';
 import Utils from '../utils/Utils';
+import { Socket } from 'socket.io';
 
 export default class QuestionnaireController {
   private service: QuestionnaireService = new QuestionnaireService();
@@ -60,6 +61,25 @@ export default class QuestionnaireController {
       response.status(result.statusCode).send(result.value);
     }
   }
+
+  //'get:questionnaireByEventId'
+  async getByIdEvent(data: any, socket: Socket) {
+    const requiredObjects: any = {
+      socketUrl: 'get:questionnaireByEventId', // !important for callback
+      items: [
+        {
+          name: "questionnaire",
+        items: ["idEvent"]
+        },
+      ],
+    };
+    if (this.utils.validateData(data, requiredObjects, socket)) {
+      const result = await this.service.getByIdEvent(data.questionnaire.idEvent);
+      console.log(result)
+      socket.emit('get:questionnaireByEventId', result);
+    }
+  }
+
 
   //delete
   async delete(request: Request, response: Response) {

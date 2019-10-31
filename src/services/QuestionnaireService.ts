@@ -18,10 +18,10 @@ export default class QuestionnaireService {
       const addNew = await this.repository.add(questionnaire);
       if (addNew.statusCode == 200) {
         return await this.repository.getId(questionnaire);
-      } else { 
+      } else {
         return addNew; // error
       }
-      
+
     } catch (ex) {
       return new ResultObject(400, { "error": String(ex) });
     }
@@ -64,6 +64,15 @@ export default class QuestionnaireService {
   public async getByIdUser(idUser: number) {
     try {
       return await this.repository.getByIdUser(idUser);
+    } catch (ex) {
+      return new ResultObject(400, { "error": String(ex) });
+    }
+  }
+
+  // getByIdEvent
+  public async getByIdEvent(idEvent: number) {
+    try {
+      return await this.repository.getByIdEvent(idEvent);
     } catch (ex) {
       return new ResultObject(400, { "error": String(ex) });
     }

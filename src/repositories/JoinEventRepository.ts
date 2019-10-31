@@ -3,8 +3,8 @@ import EventList from '../models/EventList';
 import User from '../models/UserSystem';
 import UserList from '../models/UserList';
 import JoinEvent from '../models/JoinEvent';
-import QueryFunctions from '../Queries/QueryFunctions';
-import Queries from '../Queries/Queries';
+import QueryFunctions from '../queries/QueryFunctions';
+import Queries from '../queries/Queries';
 import ResultObject from '../models/ResultObject';
 
 export default class JoinEventRepository {
@@ -49,7 +49,7 @@ export default class JoinEventRepository {
   // getJoinEvents
   public async getJoinEvents(joinEvent: JoinEvent) {
     const data = [joinEvent.idUser, joinEvent.idType];
-    const rows = await this.queryFunctions.get(this.queries.getQuery('joinEvent', 'getJoinEvents'), data);
+    const rows = await this.queryFunctions.get(this.queries.getQuery('joinEvent', 'getJoinEvents'), data); 
     if (rows.statusCode === 200) {
       const eventList: EventList = new EventList();
       rows.value.forEach((item: any) => {

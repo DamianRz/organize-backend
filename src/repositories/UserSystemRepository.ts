@@ -1,16 +1,16 @@
 import UserSystem from '../models/UserSystem';
 import MysqlConnection from '../connection/MysqlConnection';
 import ResultObject from '../models/ResultObject';
-import QueryFunctions from '../Queries/QueryFunctions';
-import Queries from '../Queries/Queries';
+import QueryFunctions from '../queries/QueryFunctions';
+import Queries from '../queries/Queries';
 
 export default class UserRepository {
   private queryFunctions: QueryFunctions = new QueryFunctions();
   private queries: Queries = new Queries();
 
   // get
-  public async get(email: string, password: string) {
-    const data = [email, password];
+  public async get(email: string) {
+    const data = [email];
     return this.queryFunctions.get(this.queries.getQuery('userSystem', 'get'), data);
   }
 

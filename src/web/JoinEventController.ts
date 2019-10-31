@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { Socket } from 'socket.io';
+
 import JoinEventService from '../services/JoinEventService';
 import Utils from '../utils/Utils';
 
@@ -57,22 +59,22 @@ export default class JoinEventController {
     }
   }
 
-  // getJoinEvents
-  public async getJoinEvents(request: Request, response: Response) {
-    const body = request.query;
+  // 'get:joinEvents'
+  public async getJoinEvents(data: any, socket: Socket) {
+    const requiredObjects: any = {
+      socketUrl: 'get:joinEvents', // !important for callback
+      items: [
+        {
+          name: 'joinEvent',
+          items: ['idUser', 'idType'],
+        },
+      ],
+    };
 
-    console.log(body);
-
-    const requiredObjects: any = [
-      {
-        name: 'joinEvent',
-        items: ['idUser', 'idType'],
-      },
-    ];
-    if (this.utils.validation(body, requiredObjects, response)) {
-      const jeData = body.joinEvent;
+    if (this.utils.validateData(data, requiredObjects, socket)) {
+      const jeData = data.joinEvent;
       const result = await this.service.getJoinEvents(jeData);
-      response.status(result.statusCode).send(result.value);
+      socket.emit('get:joinEvents', result);
     }
   }
 

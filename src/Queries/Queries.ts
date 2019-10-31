@@ -47,6 +47,8 @@ export default class Queries {
       getByIdUser: 'SELECT id, name, category FROM organize.questionnaire where questionnaire.idUser = ?;',
       getIdByIdQuestionnaire: 'SELECT idOption FROM organize.questionnaire_option where idQuestionnaire = ?;',
       deleteRelation: 'DELETE FROM organize.questionnaire-option WHERE idQuestionnaire=?;',
+      // can add userId in the future
+      getByIdEvent: 'SELECT DISTINCT q.* from questionnaire q, uses u where u.idEvent=? and q.id=u.idQuestionnaire;',
     },
 
     // question
@@ -69,7 +71,7 @@ export default class Queries {
     // userSystem
     userSystem: {
       add: 'insert into organize.usersystem(username, password, email) values(?,?,?);',
-      get: 'SELECT id, username FROM organize.usersystem where email=? and password=? LIMIT 1;',
+      get: 'SELECT id, username, password FROM organize.usersystem where email=? LIMIT 1;',
       existsEmail: 'select email from organize.usersystem where email=?',
       getIdByEmail: 'select id from organize.usersystem where email=?',
       save: 'update organize.usersystem set username=?, password=?, email=? where id=?;',
@@ -84,7 +86,7 @@ export default class Queries {
   }
 
   public getQuery(tableName: string, actionQuery: string) {
-    Logger.info('query: ' + this.queries[tableName][actionQuery]);
+    // Logger.info('query: ' + this.queries[tableName][actionQuery]);
     try {
       return {
         table: tableName,

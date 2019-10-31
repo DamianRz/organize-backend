@@ -53,10 +53,10 @@ router.route('/questions/timelimit')
   .delete((req: Request, res: Response) => timeLimit.delete(req, res));
 
 router
-  .get('/join/events', (req: Request, res: Response) => joinEvent.getJoinEvents(req, res))
+  // .get('/join/events', (req: Request, res: Response) => joinEvent.getJoinEvents(req, res))
   .get('/join/users', (req: Request, res: Response) => joinEvent.getJoinUsers(req, res))
-  .post('/signin', (req: Request, res: Response) => userSystem.signIn(req, res))
-  .post('/signup', (req: Request, res: Response) => userSystem.signUp(req, res))
+  // .post('/signin', (req: Request, res: Response) => userSystem.signIn(req, res))
+  // .post('/signup', (req: Request, res: Response) => userSystem.signUp(req, res))
   .post('/questionnaires/options', (req: Request, res: Response) => option.linkQuestionnaire(req, res))
   .post('/events/questionnaires',
     (req: Request, res: Response) => event.linkQuestionnaire(req, res));

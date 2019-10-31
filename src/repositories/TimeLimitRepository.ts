@@ -1,6 +1,6 @@
 import TimeLimit from '../models/TimeLimit';
-import QueryFunctions from '../Queries/QueryFunctions';
-import Queries from '../Queries/Queries';
+import QueryFunctions from '../queries/QueryFunctions';
+import Queries from '../queries/Queries';
 
 export default class JoinEventRepository {
   private queryFunctions: QueryFunctions = new QueryFunctions();

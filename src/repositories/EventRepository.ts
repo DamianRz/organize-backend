@@ -1,6 +1,6 @@
 import Event from '../models/Event';
-import QueryFunctions from '../Queries/QueryFunctions';
-import Queries from '../Queries/Queries';
+import QueryFunctions from '../queries/QueryFunctions';
+import Queries from '../queries/Queries';
 
 export default class EventRepository {
   private queryFunctions: QueryFunctions = new QueryFunctions();

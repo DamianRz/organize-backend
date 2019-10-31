@@ -7,12 +7,12 @@ class ResultObject {
     this.value = value;
   }
 
-  getJsonObject(): Object {
+  public getJsonObject(): object {
     return {
       statusCode: this.statusCode,
-      value: this.value
-    }
-  }  
+      value: this.value,
+    };
+  }
 }
 
 export default ResultObject;
