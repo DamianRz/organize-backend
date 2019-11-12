@@ -6,9 +6,10 @@ export default class JoinEventService {
   private repository = new JoinEventRepository();
 
   // add
-  public async add(jeData: any) {
+  public async add(jeData: any, idEvent: number) {
+    console.log('je ', idEvent)
     try {
-      const joinEvent = new JoinEvent(jeData.idEvent, jeData.idUser, jeData.idType);
+      const joinEvent = new JoinEvent(idEvent, jeData.idUser, jeData.idType);
       return await this.repository.add(joinEvent);
     } catch (ex) {
       return new ResultObject(400, {error: String(ex) });

@@ -40,55 +40,60 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var UserSystemService_1 = __importDefault(require("../services/UserSystemService"));
 var Utils_1 = __importDefault(require("../utils/Utils"));
+var ErrorsList_1 = __importDefault(require("../errors/ErrorsList"));
 var UserSystemController = (function () {
     function UserSystemController() {
+        this.errorList = new ErrorsList_1.default();
         this.service = new UserSystemService_1.default();
         this.utils = new Utils_1.default();
     }
-    UserSystemController.prototype.signIn = function (request, response) {
+    UserSystemController.prototype.signIn = function (data, socket) {
         return __awaiter(this, void 0, void 0, function () {
-            var body, requiredObjects, userData, result;
+            var requiredObjects, userData, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        body = request.body;
-                        requiredObjects = [
-                            {
-                                name: 'user',
-                                items: ['email', 'password'],
-                            },
-                        ];
-                        if (!this.utils.validation(body, requiredObjects, response)) return [3, 2];
-                        userData = body.user;
+                        requiredObjects = {
+                            socketUrl: 'post:signIn',
+                            items: [
+                                {
+                                    name: 'user',
+                                    items: ['email', 'password'],
+                                },
+                            ],
+                        };
+                        if (!this.utils.validateData(data, requiredObjects, socket)) return [3, 2];
+                        userData = data.user;
                         return [4, this.service.signIn(userData.email, userData.password)];
                     case 1:
                         result = _a.sent();
-                        response.status(result.statusCode).send(result.value);
+                        socket.emit('post:signIn', result);
                         _a.label = 2;
                     case 2: return [2];
                 }
             });
         });
     };
-    UserSystemController.prototype.signUp = function (request, response) {
+    UserSystemController.prototype.signUp = function (data, socket) {
         return __awaiter(this, void 0, void 0, function () {
-            var body, requiredObjects, userData, result;
+            var requiredObjects, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        body = request.body;
-                        requiredObjects = [
-                            {
-                                name: 'user',
-                                items: ['username', 'email', 'password'],
-                            },
-                        ];
-                        if (!this.utils.validation(body, requiredObjects, response)) return [3, 2];
-                        userData = body.user;
-                        return [4, this.service.signUp(userData)];
+                        requiredObjects = {
+                            socketUrl: 'post:signUp',
+                            items: [
+                                {
+                                    name: 'user',
+                                    items: ['username', 'email', 'password'],
+                                },
+                            ],
+                        };
+                        if (!this.utils.validateData(data, requiredObjects, socket)) return [3, 2];
+                        return [4, this.service.signUp(data.user)];
                     case 1:
                         result = _a.sent();
-                        response.status(result.statusCode).send(result.value);
+                        socket.emit('post:signUp', result);
                         _a.label = 2;
                     case 2: return [2];
                 }

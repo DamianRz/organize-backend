@@ -95,25 +95,54 @@ var QuestionnaireController = (function () {
             });
         });
     };
-    QuestionnaireController.prototype.getByIdUser = function (request, response) {
+    QuestionnaireController.prototype.getByIdUser = function (data, socket) {
         return __awaiter(this, void 0, void 0, function () {
-            var body, requiredObjects, qData, result;
+            var requiredObjects, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        body = request.body;
-                        requiredObjects = [
-                            {
-                                name: "questionnaire",
-                                items: ["idUser"]
-                            }
-                        ];
-                        if (!this.utils.validation(body, requiredObjects, response)) return [3, 2];
-                        qData = body.questionnaire;
-                        return [4, this.service.getByIdUser(qData.idUser)];
+                        console.log('accede al getQuestionnaire');
+                        requiredObjects = {
+                            socketUrl: 'get:questionnaireByIdUser',
+                            items: [
+                                {
+                                    name: "questionnaire",
+                                    items: ["idUser"]
+                                },
+                            ],
+                        };
+                        if (!this.utils.validateData(data, requiredObjects, socket)) return [3, 2];
+                        return [4, this.service.getByIdUser(data.questionnaire.idUser)];
                     case 1:
                         result = _a.sent();
-                        response.status(result.statusCode).send(result.value);
+                        socket.emit('get:questionnaireByIdUser', result);
+                        _a.label = 2;
+                    case 2: return [2];
+                }
+            });
+        });
+    };
+    QuestionnaireController.prototype.getByIdEvent = function (data, socket) {
+        return __awaiter(this, void 0, void 0, function () {
+            var requiredObjects, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log('accede al getQuestionnaire');
+                        requiredObjects = {
+                            socketUrl: 'get:questionnaireByEventId',
+                            items: [
+                                {
+                                    name: "questionnaire",
+                                    items: ["idEvent"]
+                                },
+                            ],
+                        };
+                        if (!this.utils.validateData(data, requiredObjects, socket)) return [3, 2];
+                        return [4, this.service.getByIdEvent(data.questionnaire.idEvent)];
+                    case 1:
+                        result = _a.sent();
+                        socket.emit('get:questionnaireByEventId', result);
                         _a.label = 2;
                     case 2: return [2];
                 }

@@ -45,20 +45,23 @@ var JoinEventService = (function () {
     function JoinEventService() {
         this.repository = new JoinEventRepository_1.default();
     }
-    JoinEventService.prototype.add = function (jeData) {
+    JoinEventService.prototype.add = function (jeData, idEvent) {
         return __awaiter(this, void 0, void 0, function () {
             var joinEvent, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        joinEvent = new JoinEvent_1.default(jeData.idEvent, jeData.idUser, jeData.idType);
+                        console.log('je ', idEvent);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        joinEvent = new JoinEvent_1.default(idEvent, jeData.idUser, jeData.idType);
                         return [4, this.repository.add(joinEvent)];
-                    case 1: return [2, _a.sent()];
-                    case 2:
+                    case 2: return [2, _a.sent()];
+                    case 3:
                         ex_1 = _a.sent();
                         return [2, new ResultObject_1.default(400, { error: String(ex_1) })];
-                    case 3: return [2];
+                    case 4: return [2];
                 }
             });
         });

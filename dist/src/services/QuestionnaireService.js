@@ -145,6 +145,23 @@ var QuestionnaireService = (function () {
             });
         });
     };
+    QuestionnaireService.prototype.getByIdEvent = function (idEvent) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ex_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4, this.repository.getByIdEvent(idEvent)];
+                    case 1: return [2, _a.sent()];
+                    case 2:
+                        ex_6 = _a.sent();
+                        return [2, new ResultObject_1.default(400, { "error": String(ex_6) })];
+                    case 3: return [2];
+                }
+            });
+        });
+    };
     return QuestionnaireService;
 }());
 exports.default = QuestionnaireService;

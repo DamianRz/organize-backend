@@ -40,59 +40,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var socket_io_1 = __importDefault(require("socket.io"));
 var http_1 = __importDefault(require("http"));
+var routesIO_1 = __importDefault(require("./routesIO"));
 var MysqlConnection_1 = __importDefault(require("./connection/MysqlConnection"));
 var routes_1 = __importDefault(require("./routes"));
 var Logger_1 = __importDefault(require("./utils/Logger"));
 var express_1 = __importDefault(require("express"));
-var cors_1 = __importDefault(require("cors"));
-var express_graphql_1 = __importDefault(require("express-graphql"));
-var graphql_1 = require("graphql");
+var dotenv_1 = require("dotenv");
+dotenv_1.config();
+var routesIo = new routesIO_1.default();
 var app = express_1.default();
 var server = http_1.default.createServer(app);
 var io = socket_io_1.default(server);
-var events = [
-    {
-        id: 1,
-        name: 'event test',
-    },
-    {
-        id: 2,
-        name: 'event test',
-    },
-];
-var schema = graphql_1.buildSchema("\n  type Query {\n    event(id: Int!): Event\n    events(name: String!): [Event]\n  }\n\n  type Event {\n    id: Int\n    name: String\n  }\n");
-var getEvent = function (args) {
-    var id = args.id;
-    return events.filter(function (e) {
-        return e.id === id;
-    })[0];
-};
-var getEvents = function (args) {
-    var name = args.name;
-    return events.filter(function (e) {
-        return e.name === name;
-    });
-};
-var root = {
-    event: getEvent,
-    events: getEvents,
-};
-app.use('/graphql', express_graphql_1.default({
-    schema: schema,
-    rootValue: root,
-    graphiql: true,
-}));
 function init() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             app.use(express_1.default.json());
             app.use(express_1.default.urlencoded({ extended: true }));
-            app.use(cors_1.default({
-                origin: 'http://localhost:8080'
-            }));
             app.use('/api', routes_1.default);
             try {
                 MysqlConnection_1.default.connect(server);
+                routesIo.defineRoutes(io);
             }
             catch (ex) {
                 Logger_1.default.fatal('Error in App -' + ex);
@@ -101,9 +68,5 @@ function init() {
         });
     });
 }
-io.on('connection', function (socket) {
-    console.log('user connected');
-    socket.emit('welcome', 'welcome to socket.io');
-});
 init();
 //# sourceMappingURL=app.js.map

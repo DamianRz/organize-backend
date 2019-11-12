@@ -41,8 +41,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Option_1 = __importDefault(require("../models/Option"));
 var OptionList_1 = __importDefault(require("../models/OptionList"));
 var ResultObject_1 = __importDefault(require("../models/ResultObject"));
-var QueryFunctions_1 = __importDefault(require("../Queries/QueryFunctions"));
-var Queries_1 = __importDefault(require("../Queries/Queries"));
+var QueryFunctions_1 = __importDefault(require("../queries/QueryFunctions"));
+var Queries_1 = __importDefault(require("../queries/Queries"));
 var JoinEventRepository = (function () {
     function JoinEventRepository() {
         this.queryFunctions = new QueryFunctions_1.default();

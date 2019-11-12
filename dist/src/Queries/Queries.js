@@ -43,6 +43,7 @@ var Queries = (function () {
                 getByIdUser: 'SELECT id, name, category FROM organize.questionnaire where questionnaire.idUser = ?;',
                 getIdByIdQuestionnaire: 'SELECT idOption FROM organize.questionnaire_option where idQuestionnaire = ?;',
                 deleteRelation: 'DELETE FROM organize.questionnaire-option WHERE idQuestionnaire=?;',
+                getByIdEvent: 'SELECT DISTINCT q.* from questionnaire q, uses u where u.idEvent=? and q.id=u.idQuestionnaire;',
             },
             question: {
                 add: 'INSERT INTO organize.question(idType, name, category) VALUES(?,?,?);',
@@ -59,7 +60,7 @@ var Queries = (function () {
             },
             userSystem: {
                 add: 'insert into organize.usersystem(username, password, email) values(?,?,?);',
-                get: 'SELECT id, username FROM organize.usersystem where email=? and password=? LIMIT 1;',
+                get: 'SELECT id, username, password FROM organize.usersystem where email=? LIMIT 1;',
                 existsEmail: 'select email from organize.usersystem where email=?',
                 getIdByEmail: 'select id from organize.usersystem where email=?',
                 save: 'update organize.usersystem set username=?, password=?, email=? where id=?;',
@@ -71,7 +72,6 @@ var Queries = (function () {
         this.query = '';
     }
     Queries.prototype.getQuery = function (tableName, actionQuery) {
-        Logger_1.default.info('query: ' + this.queries[tableName][actionQuery]);
         try {
             return {
                 table: tableName,

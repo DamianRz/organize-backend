@@ -120,26 +120,27 @@ var JoinEventController = (function () {
             });
         });
     };
-    JoinEventController.prototype.getJoinEvents = function (request, response) {
+    JoinEventController.prototype.getJoinEvents = function (data, socket) {
         return __awaiter(this, void 0, void 0, function () {
-            var body, requiredObjects, jeData, result;
+            var requiredObjects, jeData, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        body = request.query;
-                        console.log(body);
-                        requiredObjects = [
-                            {
-                                name: 'joinEvent',
-                                items: ['idUser', 'idType'],
-                            },
-                        ];
-                        if (!this.utils.validation(body, requiredObjects, response)) return [3, 2];
-                        jeData = body.joinEvent;
+                        requiredObjects = {
+                            socketUrl: 'get:joinEvents',
+                            items: [
+                                {
+                                    name: 'joinEvent',
+                                    items: ['idUser', 'idType'],
+                                },
+                            ],
+                        };
+                        if (!this.utils.validateData(data, requiredObjects, socket)) return [3, 2];
+                        jeData = data.joinEvent;
                         return [4, this.service.getJoinEvents(jeData)];
                     case 1:
                         result = _a.sent();
-                        response.status(result.statusCode).send(result.value);
+                        socket.emit('get:joinEvents', result);
                         _a.label = 2;
                     case 2: return [2];
                 }

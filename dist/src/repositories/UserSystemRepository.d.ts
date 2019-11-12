@@ -3,7 +3,7 @@ import ResultObject from '../models/ResultObject';
 export default class UserRepository {
     private queryFunctions;
     private queries;
-    get(email: string, password: string): Promise<ResultObject>;
+    get(email: string): Promise<ResultObject>;
     existsEmail(email: string): Promise<ResultObject>;
     add(user: UserSystem): Promise<ResultObject>;
     getIdByEmail(email: string): Promise<ResultObject>;

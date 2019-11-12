@@ -124,25 +124,30 @@ var EventService = (function () {
     };
     EventService.prototype.linkQuestionnaire = function (idEvent, idQuestionnaire, options) {
         return __awaiter(this, void 0, void 0, function () {
+            var ex_4;
             var _this = this;
             return __generator(this, function (_a) {
-                try {
-                    options.map(function (option) { return __awaiter(_this, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0: return [4, this.repository.linkQuestionnaire(idEvent, idQuestionnaire, option.idOption)];
-                                case 1:
-                                    _a.sent();
-                                    return [2];
-                            }
-                        });
-                    }); });
-                    return [2, new ResultObject_1.default(201, 'event linked with questionnaire')];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4, Promise.all(options.map(function (option) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4, this.repository.linkQuestionnaire(idEvent, idQuestionnaire, option.idOption)];
+                                        case 1:
+                                            _a.sent();
+                                            return [2];
+                                    }
+                                });
+                            }); }))];
+                    case 1:
+                        _a.sent();
+                        return [2, new ResultObject_1.default(201, 'event linked with questionnaire')];
+                    case 2:
+                        ex_4 = _a.sent();
+                        return [2, new ResultObject_1.default(400, { error: String(ex_4) })];
+                    case 3: return [2];
                 }
-                catch (ex) {
-                    return [2, new ResultObject_1.default(400, { error: String(ex) })];
-                }
-                return [2];
             });
         });
     };

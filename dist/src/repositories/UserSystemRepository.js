@@ -39,18 +39,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ResultObject_1 = __importDefault(require("../models/ResultObject"));
-var QueryFunctions_1 = __importDefault(require("../Queries/QueryFunctions"));
-var Queries_1 = __importDefault(require("../Queries/Queries"));
+var QueryFunctions_1 = __importDefault(require("../queries/QueryFunctions"));
+var Queries_1 = __importDefault(require("../queries/Queries"));
 var UserRepository = (function () {
     function UserRepository() {
         this.queryFunctions = new QueryFunctions_1.default();
         this.queries = new Queries_1.default();
     }
-    UserRepository.prototype.get = function (email, password) {
+    UserRepository.prototype.get = function (email) {
         return __awaiter(this, void 0, void 0, function () {
             var data;
             return __generator(this, function (_a) {
-                data = [email, password];
+                data = [email];
                 return [2, this.queryFunctions.get(this.queries.getQuery('userSystem', 'get'), data)];
             });
         });

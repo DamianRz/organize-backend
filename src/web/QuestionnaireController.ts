@@ -14,7 +14,7 @@ export default class QuestionnaireController {
     let requiredObjects: any = [
       {
         name: "questionnaire",
-        items: ["idUser", "name", "category"] 
+        items: ["idUser", "name", "category"]
       }
     ];
 
@@ -43,39 +43,38 @@ export default class QuestionnaireController {
     }
   }
 
-  //getByIdUser
-  async getByIdUser(request: Request, response: Response) {
-    let body = request.body;
-
-    let requiredObjects: any = [
-      {
-        name: "questionnaire",
-        items: ["idUser"]
-      }
-    ];
-
-    if (this.utils.validation(body, requiredObjects, response)) {
-      let qData = body.questionnaire;
-      //return questionnaires
-      let result = await this.service.getByIdUser(qData.idUser);
-      response.status(result.statusCode).send(result.value);
+  // 'get:questionnaireByIdUser'
+  async getByIdUser(data: any, socket: Socket) {
+    console.log('accede al getQuestionnaire')
+    const requiredObjects: any = {
+      socketUrl: 'get:questionnaireByIdUser', // !important for callback
+      items: [
+        {
+          name: "questionnaire",
+          items: ["idUser"]
+        },
+      ],
+    };
+    if (this.utils.validateData(data, requiredObjects, socket)) {
+      const result =  await this.service.getByIdUser(data.questionnaire.idUser);
+      socket.emit('get:questionnaireByIdUser', result);
     }
   }
 
   //'get:questionnaireByEventId'
   async getByIdEvent(data: any, socket: Socket) {
+    console.log('accede al getQuestionnaire')
     const requiredObjects: any = {
       socketUrl: 'get:questionnaireByEventId', // !important for callback
       items: [
         {
           name: "questionnaire",
-        items: ["idEvent"]
+          items: ["idEvent"]
         },
       ],
     };
     if (this.utils.validateData(data, requiredObjects, socket)) {
       const result = await this.service.getByIdEvent(data.questionnaire.idEvent);
-      console.log(result)
       socket.emit('get:questionnaireByEventId', result);
     }
   }

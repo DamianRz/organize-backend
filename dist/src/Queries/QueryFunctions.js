@@ -43,15 +43,20 @@ var ResultObject_1 = __importDefault(require("../models/ResultObject"));
 var QueryFunctions = (function () {
     function QueryFunctions() {
     }
-    QueryFunctions.prototype.action = function (query, data) {
+    QueryFunctions.prototype.action = function (queryData, data) {
         return __awaiter(this, void 0, void 0, function () {
-            var ex_1;
+            var ex_1, fail_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        console.log('=================================');
+                        console.log(queryData.query);
+                        console.log(data);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
                         return [4, new Promise(function (resolve, reject) {
-                                MysqlConnection_1.default.mysqlConn.query(query.query, data, function (err, result) {
+                                MysqlConnection_1.default.mysqlConn.query(queryData.query, data, function (err, result) {
                                     if (!err) {
                                         resolve(result);
                                     }
@@ -62,26 +67,33 @@ var QueryFunctions = (function () {
                             }).catch(function (err) {
                                 throw err;
                             })];
-                    case 1:
-                        _a.sent();
-                        return [2, new ResultObject_1.default(200, 'sucess ' + query.action + ' in table' + query.table)];
                     case 2:
+                        _a.sent();
+                        return [2, new ResultObject_1.default(200, 'sucess ' + queryData.action + ' in table' + queryData.table)];
+                    case 3:
                         ex_1 = _a.sent();
-                        return [2, new ResultObject_1.default(403, { 'Error ': 'table ' + query.table + ' - action ' + query.action + ' :' + String(ex_1) })];
-                    case 3: return [2];
+                        fail_1 = new ResultObject_1.default(403, { 'Error ': 'table ' + queryData.table + ' - action ' + queryData.action + ' :' + String(ex_1) });
+                        console.log(fail_1);
+                        return [2, fail_1];
+                    case 4: return [2];
                 }
             });
         });
     };
-    QueryFunctions.prototype.get = function (query, data) {
+    QueryFunctions.prototype.get = function (queryData, data) {
         return __awaiter(this, void 0, void 0, function () {
-            var rows, ex_2;
+            var rows, ex_2, fail_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        console.log('=================================');
+                        console.log(queryData.query);
+                        console.log(data);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
                         return [4, new Promise(function (resolve, reject) {
-                                MysqlConnection_1.default.mysqlConn.query(query.query, data, function (err, result) {
+                                MysqlConnection_1.default.mysqlConn.query(queryData.query, data, function (err, result) {
                                     if (!err) {
                                         resolve(result);
                                     }
@@ -92,13 +104,16 @@ var QueryFunctions = (function () {
                             }).catch(function (err) {
                                 throw err;
                             })];
-                    case 1:
-                        rows = _a.sent();
-                        return [2, new ResultObject_1.default(200, rows)];
                     case 2:
+                        rows = _a.sent();
+                        console.log(rows);
+                        return [2, new ResultObject_1.default(200, rows)];
+                    case 3:
                         ex_2 = _a.sent();
-                        return [2, new ResultObject_1.default(403, { 'Error ': 'table ' + query.table + ' - action ' + query.action + ' :' + String(ex_2) })];
-                    case 3: return [2];
+                        fail_2 = new ResultObject_1.default(403, { 'Error ': 'table ' + queryData.table + ' - action ' + queryData.action + ' :' + String(ex_2) });
+                        console.log(fail_2);
+                        return [2, fail_2];
+                    case 4: return [2];
                 }
             });
         });

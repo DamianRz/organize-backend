@@ -6,4 +6,5 @@ export default class QuestionnaireService {
     delete(idQuestionnaire: number): Promise<ResultObject>;
     deleteRelation(idQuestionnaire: number): Promise<ResultObject>;
     getByIdUser(idUser: number): Promise<ResultObject>;
+    getByIdEvent(idEvent: number): Promise<ResultObject>;
 }

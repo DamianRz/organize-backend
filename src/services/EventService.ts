@@ -64,10 +64,11 @@ export default class EventService {
 
   public async linkQuestionnaire(idEvent: number, idQuestionnaire: number, options: any) {
     try {
-      options.map(async (option: any) => {
-        await this.repository.linkQuestionnaire(idEvent, idQuestionnaire, option.idOption);
-      });
-
+      await Promise.all(
+        options.map(async (option: any) => {
+          await this.repository.linkQuestionnaire(idEvent, idQuestionnaire, option.idOption);
+        })    
+      );
       return new ResultObject(201, 'event linked with questionnaire');
     } catch (ex) {
       return new ResultObject(400, { error: String(ex) });

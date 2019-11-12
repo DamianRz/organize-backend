@@ -42,6 +42,7 @@ var EventService_1 = __importDefault(require("../services/EventService"));
 var OptionService_1 = __importDefault(require("../services/OptionService"));
 var JoinEventService_1 = __importDefault(require("../services/JoinEventService"));
 var Utils_1 = __importDefault(require("../utils/Utils"));
+var ResultObject_1 = __importDefault(require("../models/ResultObject"));
 var UserController = (function () {
     function UserController() {
         this.service = new EventService_1.default();
@@ -49,44 +50,102 @@ var UserController = (function () {
         this.optionService = new OptionService_1.default();
         this.utils = new Utils_1.default();
     }
-    UserController.prototype.add = function (request, response) {
+    UserController.prototype.getJoinEvents = function (data, socket) {
         return __awaiter(this, void 0, void 0, function () {
-            var body, requiredObjects, eventData, jeData, newEvent, addJoinEvent;
+            var requiredObjects, jeData, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        body = request.body;
-                        requiredObjects = [
-                            {
-                                name: 'event',
-                                items: ['name', 'location', 'start', 'end', 'description', 'guestsNumber', 'created', 'state'],
-                            },
-                            {
-                                name: 'joinEvent',
-                                items: ['idUser', 'idType'],
-                            },
-                        ];
-                        if (!this.utils.validation(body, requiredObjects, response)) return [3, 4];
-                        eventData = body.event;
-                        jeData = body.joinEvent;
+                        requiredObjects = {
+                            socketUrl: 'get:joinEvents',
+                            items: [
+                                {
+                                    name: 'joinEvent',
+                                    items: ['idUser', 'idType'],
+                                },
+                            ],
+                        };
+                        if (!this.utils.validateData(data, requiredObjects, socket)) return [3, 2];
+                        jeData = data.joinEvent;
+                        return [4, this.service.getJoinEvents(jeData)];
+                    case 1:
+                        result = _a.sent();
+                        socket.emit('get:joinEvents', result);
+                        _a.label = 2;
+                    case 2: return [2];
+                }
+            });
+        });
+    };
+    UserController.prototype.add = function (data, socket) {
+        return __awaiter(this, void 0, void 0, function () {
+            var socketUrl, requiredObjects, eventData, jeData, newEvent, addJoinEvent;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        socketUrl = 'post:event';
+                        requiredObjects = {
+                            socketUrl: socketUrl,
+                            items: [
+                                {
+                                    name: 'event',
+                                    items: ['name', 'location', 'start', 'end', 'description', 'guestsNumber', 'created', 'state'],
+                                },
+                                {
+                                    name: 'joinEvent',
+                                    items: ['idUser', 'idType'],
+                                },
+                            ],
+                        };
+                        if (!this.utils.validateData(data, requiredObjects, socket)) return [3, 4];
+                        eventData = data.event;
+                        jeData = data.joinEvent;
                         return [4, this.service.add(eventData)];
                     case 1:
                         newEvent = _a.sent();
-                        if (!(newEvent.statusCode === 200)) return [3, 3];
-                        jeData.idEvent = newEvent.value.id;
-                        return [4, this.joinEventService.add(jeData)];
+                        if (!(newEvent.statusCode == 200)) return [3, 3];
+                        return [4, this.joinEventService.add(jeData, newEvent.value[0].id)];
                     case 2:
                         addJoinEvent = _a.sent();
-                        if (addJoinEvent.statusCode === 200) {
-                            response.status(addJoinEvent.statusCode)
-                                .send(addJoinEvent.value);
-                        }
-                        else {
-                            response.status(addJoinEvent.statusCode).send(addJoinEvent.value);
-                        }
+                        socket.emit(socketUrl, new ResultObject_1.default(200, { id: newEvent.value[0].id }));
                         return [3, 4];
                     case 3:
-                        response.status(newEvent.statusCode).send(newEvent.value);
+                        socket.emit(socketUrl, newEvent);
+                        _a.label = 4;
+                    case 4: return [2];
+                }
+            });
+        });
+    };
+    UserController.prototype.linkQuestionnaire = function (data, socket) {
+        return __awaiter(this, void 0, void 0, function () {
+            var socketUrl, requiredObjects, options, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        socketUrl = 'post:eventQuestionnaireOption';
+                        requiredObjects = {
+                            socketUrl: socketUrl,
+                            items: [
+                                {
+                                    name: 'link',
+                                    items: ['idEvent', 'idQuestionnaire'],
+                                },
+                            ],
+                        };
+                        if (!this.utils.validateData(data, requiredObjects, socket)) return [3, 4];
+                        return [4, this.optionService.getIdByIdQuestionnaire(data.link.idQuestionnaire)];
+                    case 1:
+                        options = _a.sent();
+                        console.log('options.statusCode', options.statusCode);
+                        if (!(options.statusCode === 200)) return [3, 3];
+                        return [4, this.service.linkQuestionnaire(data.link.idEvent, data.link.idQuestionnaire, options.value)];
+                    case 2:
+                        result = _a.sent();
+                        socket.emit(socketUrl, result.value);
+                        return [3, 4];
+                    case 3:
+                        socket.emit(socketUrl, options.value);
                         _a.label = 4;
                     case 4: return [2];
                 }
@@ -144,38 +203,6 @@ var UserController = (function () {
                         return [3, 4];
                     case 3:
                         response.status(deleteJoinEvent.statusCode).send(deleteJoinEvent.value);
-                        _a.label = 4;
-                    case 4: return [2];
-                }
-            });
-        });
-    };
-    UserController.prototype.linkQuestionnaire = function (request, response) {
-        return __awaiter(this, void 0, void 0, function () {
-            var body, requiredObjects, lData, options, result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        body = request.body;
-                        requiredObjects = [
-                            {
-                                name: 'link',
-                                items: ['idEvent', 'idQuestionnaire'],
-                            },
-                        ];
-                        if (!this.utils.validation(body, requiredObjects, response)) return [3, 4];
-                        lData = body.link;
-                        return [4, this.optionService.getIdByIdQuestionnaire(lData.idQuestionnaire)];
-                    case 1:
-                        options = _a.sent();
-                        if (!(options.statusCode === 200)) return [3, 3];
-                        return [4, this.service.linkQuestionnaire(lData.idEvent, lData.idQuestionnaire, options.value)];
-                    case 2:
-                        result = _a.sent();
-                        response.status(result.statusCode).send(result.value);
-                        return [3, 4];
-                    case 3:
-                        response.status(options.statusCode).send(options.value);
                         _a.label = 4;
                     case 4: return [2];
                 }

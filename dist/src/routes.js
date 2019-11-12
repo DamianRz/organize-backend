@@ -49,10 +49,7 @@ router.route('/questions/timelimit')
     .put(function (req, res) { return timeLimit.setMaxTime(req, res); })
     .delete(function (req, res) { return timeLimit.delete(req, res); });
 router
-    .get('/join/events', function (req, res) { return joinEvent.getJoinEvents(req, res); })
     .get('/join/users', function (req, res) { return joinEvent.getJoinUsers(req, res); })
-    .post('/signin', function (req, res) { return userSystem.signIn(req, res); })
-    .post('/signup', function (req, res) { return userSystem.signUp(req, res); })
     .post('/questionnaires/options', function (req, res) { return option.linkQuestionnaire(req, res); })
     .post('/events/questionnaires', function (req, res) { return event.linkQuestionnaire(req, res); });
 exports.default = router;

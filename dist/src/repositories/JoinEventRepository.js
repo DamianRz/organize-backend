@@ -42,8 +42,8 @@ var Event_1 = __importDefault(require("../models/Event"));
 var EventList_1 = __importDefault(require("../models/EventList"));
 var UserSystem_1 = __importDefault(require("../models/UserSystem"));
 var UserList_1 = __importDefault(require("../models/UserList"));
-var QueryFunctions_1 = __importDefault(require("../Queries/QueryFunctions"));
-var Queries_1 = __importDefault(require("../Queries/Queries"));
+var QueryFunctions_1 = __importDefault(require("../queries/QueryFunctions"));
+var Queries_1 = __importDefault(require("../queries/Queries"));
 var ResultObject_1 = __importDefault(require("../models/ResultObject"));
 var JoinEventRepository = (function () {
     function JoinEventRepository() {

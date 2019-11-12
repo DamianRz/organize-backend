@@ -38,8 +38,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var QueryFunctions_1 = __importDefault(require("../Queries/QueryFunctions"));
-var Queries_1 = __importDefault(require("../Queries/Queries"));
+var QueryFunctions_1 = __importDefault(require("../queries/QueryFunctions"));
+var Queries_1 = __importDefault(require("../queries/Queries"));
 var JoinEventRepository = (function () {
     function JoinEventRepository() {
         this.queryFunctions = new QueryFunctions_1.default();

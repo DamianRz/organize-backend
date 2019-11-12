@@ -42,34 +42,50 @@ var UserSystem_1 = __importDefault(require("../models/UserSystem"));
 var UserSystemRepository_1 = __importDefault(require("../repositories/UserSystemRepository"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var ResultObject_1 = __importDefault(require("../models/ResultObject"));
+var ErrorsList_1 = __importDefault(require("../errors/ErrorsList"));
 var UserSystemService = (function () {
     function UserSystemService() {
         this.repository = new UserSystemRepository_1.default();
+        this.errorsList = new ErrorsList_1.default();
     }
     UserSystemService.prototype.signIn = function (email, password) {
         return __awaiter(this, void 0, void 0, function () {
-            var salt, hashPassword;
+            var existsUser, comparePassword, getToken;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, bcryptjs_1.default.genSalt(10)];
+                    case 0: return [4, this.repository.get(email)];
                     case 1:
-                        salt = _a.sent();
-                        return [4, bcryptjs_1.default.hash(password, salt)];
+                        existsUser = _a.sent();
+                        if (!(existsUser.statusCode === 200)) return [3, 8];
+                        if (!existsUser.value[0]) return [3, 6];
+                        return [4, bcryptjs_1.default.compare(password, existsUser.value[0].password)];
                     case 2:
-                        hashPassword = _a.sent();
-                        return [4, this.repository.get(email, hashPassword)];
-                    case 3: return [2, _a.sent()];
+                        comparePassword = _a.sent();
+                        if (!comparePassword) return [3, 4];
+                        return [4, this.generateToken({ id: existsUser.value[0].id, username: existsUser.value[0].username })];
+                    case 3:
+                        getToken = _a.sent();
+                        console.log(existsUser.value[0].username);
+                        return [2, new ResultObject_1.default(200, { id: existsUser.value[0].id, username: existsUser.value[0].username, token: getToken.value })];
+                    case 4: return [2, new ResultObject_1.default(401, 'incorrect password')];
+                    case 5: return [2, existsUser];
+                    case 6: return [2, new ResultObject_1.default(401, 'user do not exists')];
+                    case 7: return [3, 9];
+                    case 8:
+                        console.log('get user by email error');
+                        return [2, existsUser];
+                    case 9: return [2];
                 }
             });
         });
     };
     UserSystemService.prototype.signUp = function (userData) {
         return __awaiter(this, void 0, void 0, function () {
-            var userSystem, salt, hashPassword, existsEmail, addNewUserSystem, ex_1;
+            var userSystem, salt, hashPassword, existsEmail, addNewUserSystem, getNewUserId, getToken, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 12, , 13]);
+                        _a.trys.push([0, 15, , 16]);
                         userSystem = new UserSystem_1.default();
                         userSystem.username = userData.username;
                         userSystem.email = userData.email;
@@ -83,24 +99,32 @@ var UserSystemService = (function () {
                         return [4, this.repository.existsEmail(userSystem.email)];
                     case 3:
                         existsEmail = _a.sent();
-                        if (!(existsEmail.statusCode === 200)) return [3, 10];
-                        if (!!existsEmail.value) return [3, 8];
+                        if (!(existsEmail.statusCode === 200)) return [3, 13];
+                        if (!!existsEmail.value) return [3, 11];
                         return [4, this.repository.add(userSystem)];
                     case 4:
                         addNewUserSystem = _a.sent();
-                        if (!(addNewUserSystem.statusCode === 200)) return [3, 6];
+                        if (!(addNewUserSystem.statusCode === 200)) return [3, 9];
                         return [4, this.repository.getIdByEmail(userSystem.email)];
-                    case 5: return [2, _a.sent()];
-                    case 6: return [2, addNewUserSystem];
-                    case 7: return [3, 9];
-                    case 8: return [2, new ResultObject_1.default(403, { error: 'email exists' })];
-                    case 9: return [3, 11];
-                    case 10: return [2, existsEmail];
-                    case 11: return [3, 13];
-                    case 12:
+                    case 5:
+                        getNewUserId = _a.sent();
+                        if (!(getNewUserId.statusCode === 200)) return [3, 7];
+                        return [4, this.generateToken({ id: getNewUserId.value[0].id })];
+                    case 6:
+                        getToken = _a.sent();
+                        return [2, new ResultObject_1.default(200, { id: getNewUserId.value[0].id, token: getToken.value })];
+                    case 7: return [2, getNewUserId];
+                    case 8: return [3, 10];
+                    case 9: return [2, addNewUserSystem];
+                    case 10: return [3, 12];
+                    case 11: return [2, new ResultObject_1.default(403, { error: this.errorsList.clientError.emailExists })];
+                    case 12: return [3, 14];
+                    case 13: return [2, existsEmail];
+                    case 14: return [3, 16];
+                    case 15:
                         ex_1 = _a.sent();
                         return [2, new ResultObject_1.default(400, { error: String(ex_1) })];
-                    case 13: return [2];
+                    case 16: return [2];
                 }
             });
         });
@@ -134,6 +158,23 @@ var UserSystemService = (function () {
                     case 0: return [4, this.repository.delete(id)];
                     case 1: return [2, _a.sent()];
                 }
+            });
+        });
+    };
+    UserSystemService.prototype.generateToken = function (data) {
+        return __awaiter(this, void 0, void 0, function () {
+            var secret, jwt, token;
+            return __generator(this, function (_a) {
+                secret = process.env.SECRET || 'secret';
+                jwt = require('jsonwebtoken');
+                try {
+                    token = jwt.sign({ data: data }, secret, { expiresIn: 60 * 60 });
+                    return [2, { statusCode: 200, value: token }];
+                }
+                catch (error) {
+                    return [2, { statusCode: 403, value: error }];
+                }
+                return [2];
             });
         });
     };

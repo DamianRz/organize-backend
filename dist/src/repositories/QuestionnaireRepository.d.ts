@@ -6,6 +6,7 @@ export default class QuestionnaireRepository {
     add(q: Questionnaire): Promise<ResultObject>;
     save(q: Questionnaire): Promise<ResultObject>;
     getByIdUser(idQuestionnaire: number): Promise<ResultObject>;
+    getByIdEvent(idEvent: number): Promise<ResultObject>;
     getId(q: Questionnaire): Promise<ResultObject>;
     delete(idQuestionnaire: number): Promise<ResultObject>;
     deleteRelation(idQuestionnaire: number): Promise<ResultObject>;

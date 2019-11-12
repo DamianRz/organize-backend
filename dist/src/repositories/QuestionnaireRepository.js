@@ -41,8 +41,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Questionnaire_1 = __importDefault(require("../models/Questionnaire"));
 var QuestionnaireList_1 = __importDefault(require("../models/QuestionnaireList"));
 var ResultObject_1 = __importDefault(require("../models/ResultObject"));
-var QueryFunctions_1 = __importDefault(require("../Queries/QueryFunctions"));
-var Queries_1 = __importDefault(require("../Queries/Queries"));
+var QueryFunctions_1 = __importDefault(require("../queries/QueryFunctions"));
+var Queries_1 = __importDefault(require("../queries/Queries"));
 var QuestionnaireRepository = (function () {
     function QuestionnaireRepository() {
         this.queryFunctions = new QueryFunctions_1.default();
@@ -84,6 +84,33 @@ var QuestionnaireRepository = (function () {
                                 qList_1.add(q);
                             });
                             return [2, new ResultObject_1.default(200, qList_1)];
+                        }
+                        else {
+                            return [2, new ResultObject_1.default(rows.statusCode, rows)];
+                        }
+                        return [2];
+                }
+            });
+        });
+    };
+    QuestionnaireRepository.prototype.getByIdEvent = function (idEvent) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data, rows, qList_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        data = [idEvent];
+                        return [4, this.queryFunctions.get(this.queries.getQuery('questionnaire', 'getByIdEvent'), data)];
+                    case 1:
+                        rows = _a.sent();
+                        if (rows.statusCode) {
+                            qList_2 = new QuestionnaireList_1.default();
+                            rows.value.forEach(function (item) {
+                                var q = new Questionnaire_1.default();
+                                Object.assign(q, item);
+                                qList_2.add(q);
+                            });
+                            return [2, new ResultObject_1.default(200, qList_2)];
                         }
                         else {
                             return [2, new ResultObject_1.default(rows.statusCode, rows)];

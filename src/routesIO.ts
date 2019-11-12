@@ -23,11 +23,16 @@ export default class RoutesIO {
       socket.on('post:signIn', (data) => { this.userSystem.signIn(data, socket); } );
       socket.on('post:signUp', (data) => { this.userSystem.signUp(data, socket); } );
 
+      // Event
+      socket.on('post:event', (data) => { this.event.add(data, socket); } );
+      socket.on('post:eventQuestionnaireOption', (data) => { this.event.linkQuestionnaire(data, socket); } );
+
       // JoinEvents
       socket.on('get:joinEvents', (data) => { this.joinEvent.getJoinEvents(data, socket); } );
 
       // Questionnaire
       socket.on('get:questionnaireByEventId', (data) => { this.questionnaire.getByIdEvent(data, socket); } );
+      socket.on('get:questionnaireByIdUser', (data) => { this.questionnaire.getByIdUser(data, socket); } );
     });
   }
 }
