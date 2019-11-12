@@ -8,7 +8,7 @@ var ResultObject = (function () {
     ResultObject.prototype.getJsonObject = function () {
         return {
             statusCode: this.statusCode,
-            value: this.value
+            value: this.value,
         };
     };
     return ResultObject;
