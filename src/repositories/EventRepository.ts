@@ -35,4 +35,10 @@ export default class EventRepository {
     const data = [idEvent, idQuestionnaire, idOption];
     return this.queryFunctions.action(this.queries.getQuery('event', 'link'), data);
   }
+
+  // removeLinkQuestionnaire
+  public async removeLinkQuestionnaire(idEvent: number) {
+    const data = [idEvent];
+    return this.queryFunctions.action(this.queries.getQuery('event', 'removeLink'), data);
+  }
 }

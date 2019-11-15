@@ -25,7 +25,11 @@ export default class RoutesIO {
 
       // Event
       socket.on('post:event', (data) => { this.event.add(data, socket); } );
+      socket.on('put:event', (data) => { this.event.save(data, socket); } );
+      socket.on('delete:event', (data) => { this.event.delete(data, socket); } );
+      
       socket.on('post:eventQuestionnaireOption', (data) => { this.event.linkQuestionnaire(data, socket); } );
+      socket.on('delete:eventQuestionnaireOption', (data) => { this.event.removeLinkQuestionnaire(data, socket); } );
 
       // JoinEvents
       socket.on('get:joinEvents', (data) => { this.joinEvent.getJoinEvents(data, socket); } );

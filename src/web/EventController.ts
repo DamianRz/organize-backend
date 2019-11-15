@@ -71,57 +71,95 @@ export default class UserController {
       items: [
         {
           name: 'link',
-          items: ['idEvent', 'idQuestionnaire'],
+          items: ['idEvent', 'idQuestionnaires'],
         },
       ],
     };
     if (this.utils.validateData(data, requiredObjects, socket)) {
-      const options = await this.optionService.getIdByIdQuestionnaire(data.link.idQuestionnaire);
-      console.log('options.statusCode',options.statusCode)
-      if (options.statusCode === 200) {
-        
-        const result = await this.service.linkQuestionnaire(data.link.idEvent, data.link.idQuestionnaire, options.value);
-        socket.emit(socketUrl, result.value);
+      let listLinkQO: any = [];
+      let fail = new ResultObject(200, ''); // if have error, cancel insert
+      await Promise.all(
+        data.link.idQuestionnaires.map(async (idQ: any) => {
+          const options = await this.optionService.getIdByIdQuestionnaire(idQ);
+          if (options.statusCode === 200) {
+            listLinkQO.push({ idQ: idQ, value: options.value });
+            console.log(options.value)
+          } else {
+            fail = options;
+          }
+        })
+      );
+      
+      if (fail.statusCode == 200) { // no errors
+        await Promise.all(
+          listLinkQO.map(async (item: any) => {
+            const result = await this.service.linkQuestionnaire(data.link.idEvent, item.idQ, item.value);
+            if (result.statusCode != 200) { // in case of error
+              fail = result;
+            }
+          })
+        );
+        socket.emit(socketUrl, new ResultObject(200, 'success link relation to event-qo'))
       } else {
-        socket.emit(socketUrl, options.value);
+        socket.emit(socketUrl, fail); // send error
       }
+    }
+  }
+  // removeLinkQuestionnaire
+  public async removeLinkQuestionnaire(data: any, socket: Socket) {
+    const socketUrl = 'delete:eventQuestionnaireOption';
+    const requiredObjects: any = {
+      socketUrl: socketUrl, // !important for callback
+      items: [
+        {
+          name: 'link',
+          items: ['idEvent'],
+        },
+      ],
+    };
+    if (this.utils.validateData(data, requiredObjects, socket)) {
+      const result = await this.service.removeLinkQuestionnaire(data.link.idEvent);
+      socket.emit(socketUrl, result.value);
     }
   }
 
   // save
-  public async save(request: Request, response: Response) {
-    const body = request.body;
-
-    const requiredObjects: any = [
-      {
-        name: 'event',
-        items: ['id', 'name', 'location', 'start', 'end', 'description', 'guestsNumber'],
-      },
-    ];
-    if (this.utils.validation(body, requiredObjects, response)) {
-      const eventData = body.event;
-      const result = await this.service.save(eventData);
-      response.status(result.statusCode).send(result.value);
+  public async save(data: any, socket: Socket) {
+    const socketUrl = 'put:event';
+    const requiredObjects: any = {
+      socketUrl: socketUrl, // !important for callback
+      items: [
+        {
+          name: 'event',
+          items: ['id', 'name', 'location', 'start', 'end', 'description', 'guestsNumber'],
+        },
+      ],
+    };
+    if (this.utils.validateData(data, requiredObjects, socket)) {
+      const result = await this.service.save(data.event);
+      socket.emit(socketUrl, result);
     }
   }
 
   // delete
-  public async delete(request: Request, response: Response) {
-    const body = request.body;
-    const requiredObjects: any = [
-      {
-        name: 'event',
-        items: ['id'],
-      },
-    ];
-    if (this.utils.validation(body, requiredObjects, response)) {
-      const eventId = body.event.id;
-      const deleteJoinEvent = await this.joinEventService.delete(eventId);
+  public async delete(data: any, socket: Socket) {
+    const socketUrl = 'delete:event';
+    const requiredObjects: any = {
+      socketUrl: socketUrl, // !important for callback
+      items: [
+        {
+          name: 'event',
+          items: ['id'],
+        },
+      ],
+    };
+    if (this.utils.validateData(data, requiredObjects, socket)) {
+      const deleteJoinEvent = await this.joinEventService.delete(data.event.Id);
       if (deleteJoinEvent.statusCode === 200) {
-        const deleteEvent = await this.service.delete(body.id);
-        response.status(deleteEvent.statusCode).send(deleteEvent.value);
+        const deleteEvent = await this.service.delete(data.event.id);
+        socket.emit(socketUrl, deleteEvent);
       } else {
-        response.status(deleteJoinEvent.statusCode).send(deleteJoinEvent.value); // error
+        socket.emit(socketUrl, deleteJoinEvent);
       }
     }
   }

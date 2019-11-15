@@ -67,9 +67,19 @@ export default class EventService {
       await Promise.all(
         options.map(async (option: any) => {
           await this.repository.linkQuestionnaire(idEvent, idQuestionnaire, option.idOption);
-        })    
+        })
       );
       return new ResultObject(201, 'event linked with questionnaire');
+    } catch (ex) {
+      return new ResultObject(400, { error: String(ex) });
+    }
+  }
+
+  // removeLinkQuestionnaire
+  public async removeLinkQuestionnaire(idEvent: number) {
+    try {
+      await this.repository.removeLinkQuestionnaire(idEvent);
+      return new ResultObject(201, 'event links removed');
     } catch (ex) {
       return new ResultObject(400, { error: String(ex) });
     }

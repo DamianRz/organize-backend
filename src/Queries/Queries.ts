@@ -14,6 +14,7 @@ export default class Queries {
       save: 'UPDATE organize.event SET name=?, location=?, start=?, end=?, description=?, guestsNumber=? WHERE id=?;',
       delete: 'DELETE FROM organize.event where id=?;',
       link: 'INSERT INTO organize.uses(idEvent, idQuestionnaire, idOption) VALUES(?,?,?);',
+      removeLink: 'DELETE FROM organize.uses where idEvent=?;',
     },
 
     // joinEvent
