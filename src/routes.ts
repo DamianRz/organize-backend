@@ -21,8 +21,8 @@ router.route('/users')
   .delete((req: Request, res: Response) => userSystem.delete(req, res));
 
 router.route('/events')
-  .put((req: Request, res: Response) => event.save(req, res))
-  .delete((req: Request, res: Response) => event.delete(req, res));
+  // .put((req: Request, res: Response) => event.save(req, res))
+  // .delete((req: Request, res: Response) => event.delete(req, res));
 
 router.route('/events/inviteds')
   .post((req: Request, res: Response) => joinEvent.add(req, res))
@@ -30,8 +30,8 @@ router.route('/events/inviteds')
   .delete((req: Request, res: Response) => joinEvent.delete(req, res));
 
 router.route('/questionnaires')
-  .get((req: Request, res: Response) => questionnaire.getByIdUser(req, res))
-  .post((req: Request, res: Response) => questionnaire.add(req, res))
+  // .get((req: Request, res: Response) => questionnaire.getByIdUser(req, res))
+  // .post((req: Request, res: Response) => questionnaire.add(req, res))
   .put((req: Request, res: Response) => questionnaire.save(req, res))
   .delete((req: Request, res: Response) => questionnaire.delete(req, res));
 

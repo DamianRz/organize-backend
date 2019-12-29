@@ -44,7 +44,7 @@ export default class EventService {
       event.start = eventData.start;
       event.end = eventData.end;
       event.description = eventData.description;
-      event.guestsNumber = eventData.guestNumber;
+      event.guestsNumber = eventData.guestsNumber;
       event.state = eventData.state;
 
       return await this.repository.save(event);

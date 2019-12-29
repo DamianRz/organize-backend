@@ -9,9 +9,9 @@ export default class Queries {
   private queries: any = {
     // event
     event: {
-      add: 'INSERT INTO organize.event(name, location, start, end, description, guestsNumber, created) VALUES(?,?,?,?,?,?,?);',
+      add: 'INSERT INTO organize.event(name, location, start, end, description, guestsNumber, state, created) VALUES(?,?,?,?,?,?,?,?);',
       getId: 'SELECT id FROM organize.event WHERE name=? and created=?',
-      save: 'UPDATE organize.event SET name=?, location=?, start=?, end=?, description=?, guestsNumber=? WHERE id=?;',
+      save: 'UPDATE organize.event SET name=?, location=?, start=?, end=?, description=?, guestsNumber=?, state=? WHERE id=?;',
       delete: 'DELETE FROM organize.event where id=?;',
       link: 'INSERT INTO organize.uses(idEvent, idQuestionnaire, idOption) VALUES(?,?,?);',
       removeLink: 'DELETE FROM organize.uses where idEvent=?;',
@@ -30,13 +30,13 @@ export default class Queries {
     // option
     option: {
       add: 'INSERT INTO organize.option(idUser, idQuestion, name, cost) VALUES(?,?,?,?);',
+      getId: 'SELECT id FROM organize.option o where o.idUser = ? AND o.idQuestion = ? AND o.name = ?;',
       link: 'INSERT INTO organize.questionnaire_option(idQuestionnaire, idOption) VALUES(?,?);',
       save: 'UPDATE organize.option SET name=?, cost=?, idUser=?, idQuestion=? WHERE id=?;',
       delete: 'DELETE FROM organize.option WHERE id=?;',
       deleteRelation: 'DELETE FROM organize.questionnaire-option WHERE idOption=?;',
       getByIdUser: 'SELECT * FROM organize.option where idUser = ?;',
       getIdByIdQuestionnaire: 'SELECT idOption FROM organize.questionnaire_option where idQuestionnaire = ?;',
-      getId: 'SELECT id FROM organize.option o where o.idUser = ? AND o.idQuestion = ? AND o.name = ?;',
     },
 
     // questionnaire
@@ -55,8 +55,9 @@ export default class Queries {
     // question
     question: {
       add: 'INSERT INTO organize.question(idType, name, category) VALUES(?,?,?);',
-      getByIdType: 'SELECT * FROM organize.question q where q.idType = ?;',
       getId: 'SELECT id FROM organize.question q where q.idType = ? AND q.name = ? AND q.category = ?;',
+      getByIdType: 'SELECT * FROM organize.question q where q.idType = ?;',
+      getAll: 'SELECT id, name FROM organize.question;',
       save: 'UPDATE organize.question SET idType=?, name=?, category=? WHERE id=?;',
       delete: 'DELETE FROM organize.question WHERE id=?;',
     },

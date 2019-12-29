@@ -3,12 +3,13 @@ import Question from '../models/Question';
 // import OptionList from '../models/OptionList';
 import QuestionRepository from '../repositories/QuestionRepository';
 import ResultObject from '../models/ResultObject';
+import { QuestionInterface } from '../interfaces/Question';
 
 export default class QuestionService {
   private repository = new QuestionRepository();
 
   // add
-  public async add(qData: any) {
+  public async add(qData: QuestionInterface) {
     try {
       const question: Question = new Question();
       question.idType = qData.idType;
@@ -59,6 +60,14 @@ export default class QuestionService {
   //     return new ResultObject(400, { "error": String(ex) });
   //   }
   // }
+
+  public async getAll() {
+    try {
+      return await this.repository.getAll();
+    } catch (ex) {
+      return new ResultObject(400, { error: String(ex) });
+    }
+  }
 
   // getByIdType
   public async getByIdType(idType: number) {

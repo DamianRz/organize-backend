@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import QuestionService from '../services/QuestionService';
 import Utils from '../utils/Utils';
+import { Socket } from 'socket.io';
 
 export default class QuestionController {
   private service: QuestionService = new QuestionService();
@@ -39,6 +40,25 @@ export default class QuestionController {
       response.status(result.statusCode).send(result.value);
     }
   }
+
+  //getAll
+  public async getAll(data: any, socket: Socket) {
+    const requiredObjects: any = {
+      socketUrl: 'get:defaultQuestions', // !important for callback
+      items: [
+        // {
+        //   name: 'joinEvent',
+        //   items: ['idUser', 'idType'],
+        // },
+      ],
+    };
+
+    if (this.utils.validateData(data, requiredObjects, socket)) {
+      const result = await this.service.getAll();
+      socket.emit(requiredObjects.socketUrl, result);
+    }
+  }
+
 
   // getByIdType
   public async getByIdType(request: Request, response: Response) {

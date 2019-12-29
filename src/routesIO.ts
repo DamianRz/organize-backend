@@ -35,8 +35,13 @@ export default class RoutesIO {
       socket.on('get:joinEvents', (data) => { this.joinEvent.getJoinEvents(data, socket); } );
 
       // Questionnaire
+      socket.on('post:questionnaire', (data) => { this.questionnaire.add(data, socket); } );
+      socket.on('post:questionnaireFull', (data) => { this.questionnaire.addFull(data, socket); } );
       socket.on('get:questionnaireByEventId', (data) => { this.questionnaire.getByIdEvent(data, socket); } );
       socket.on('get:questionnaireByIdUser', (data) => { this.questionnaire.getByIdUser(data, socket); } );
+    
+      // Questions
+      socket.on('get:defaultQuestions', (data) => { this.question.getAll(data, socket); } );
     });
   }
 }

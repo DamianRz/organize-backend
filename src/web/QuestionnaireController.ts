@@ -8,22 +8,47 @@ export default class QuestionnaireController {
   private utils = new Utils();
 
   //add
-  async add(request: Request, response: Response) {
-    let body = request.body;
-
-    let requiredObjects: any = [
-      {
-        name: "questionnaire",
-        items: ["idUser", "name", "category"]
-      }
-    ];
-
-    if (this.utils.validation(body, requiredObjects, response)) {
-      let qData = body.questionnaire;
-      let result = await this.service.add(qData);
-      response.status(result.statusCode).send(result.value);
+  async add(data: any, socket: Socket) {
+    const requiredObjects: any = {
+      socketUrl: 'post:questionnaire', // !important for callback
+      items: [
+        {
+          name: "questionnaire",
+          items: ["idUser", "name", "category", "questions"]
+        }
+      ],
+    };
+    if (this.utils.validateData(data, requiredObjects, socket)) {
+      let result = await this.service.add(data.questionnaire);
+      socket.emit(requiredObjects.socketUrl, result);
     }
   }
+
+  // 'post:questionnaireFull'
+  async addFull(data: any, socket: Socket) {
+    const requiredObjects: any = {
+      socketUrl: 'post:questionnaireFull', // !important for callback
+      items: [
+        {
+          name: "questionnaire",
+          items: ["idUser", "name", "category", "questions"]
+        }
+      ],
+    };
+    if (this.utils.validateData(data, requiredObjects, socket)) {
+      let result = await this.service.addFull(data.questionnaire);
+      socket.emit(requiredObjects.socketUrl, result);
+    }
+  }
+
+/*
+  add questionnaire
+  add questions -> options
+  add in table questionnaire-option
+
+*/
+
+
 
   //save
   async save(request: Request, response: Response) {
@@ -56,7 +81,7 @@ export default class QuestionnaireController {
       ],
     };
     if (this.utils.validateData(data, requiredObjects, socket)) {
-      const result =  await this.service.getByIdUser(data.questionnaire.idUser);
+      const result = await this.service.getByIdUser(data.questionnaire.idUser);
       socket.emit('get:questionnaireByIdUser', result);
     }
   }

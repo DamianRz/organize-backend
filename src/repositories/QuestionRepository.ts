@@ -37,6 +37,12 @@ export default class QuestionRepository {
     }
   }
 
+  // getAll
+  public async getAll() {
+    const data: any = [];
+    return this.queryFunctions.get(this.queries.getQuery('question', 'getAll'), data);
+  }
+
   // getId
   public async getId(q: Question) {
     const data = [q.idType, q.name, q.category];

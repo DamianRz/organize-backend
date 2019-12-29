@@ -8,7 +8,7 @@ export default class EventRepository {
 
   // add
   public async add(e: Event) {
-    const data = [e.name, e.location, e.start, e.end, e.description, e.guestsNumber, e.created];
+    const data = [e.name, e.location, e.start, e.end, e.description, e.guestsNumber, e.state, e.created];
     return this.queryFunctions.action(this.queries.getQuery('event', 'add'), data);
   }
 
@@ -20,7 +20,7 @@ export default class EventRepository {
 
   // save
   public async save(e: Event) {
-    const data = [e.name, e.location, e.start, e.end, e.description, e.guestsNumber, e.id];
+    const data = [e.name, e.location, e.start, e.end, e.description, e.guestsNumber, e.state, e.id];
     return this.queryFunctions.action(this.queries.getQuery('event', 'save'), data);
   }
 

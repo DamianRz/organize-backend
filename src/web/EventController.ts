@@ -154,7 +154,7 @@ export default class UserController {
       ],
     };
     if (this.utils.validateData(data, requiredObjects, socket)) {
-      const deleteJoinEvent = await this.joinEventService.delete(data.event.Id);
+      const deleteJoinEvent = await this.joinEventService.delete(data.event.id);
       if (deleteJoinEvent.statusCode === 200) {
         const deleteEvent = await this.service.delete(data.event.id);
         socket.emit(socketUrl, deleteEvent);
