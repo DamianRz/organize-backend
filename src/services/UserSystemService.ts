@@ -39,22 +39,27 @@ export default class UserSystemService {
 
   //  signUp
   public async signUp(userData: any) {
+    console.log('accede service')
     try {
       const userSystem: UserSystem = new UserSystem();
       userSystem.username = userData.username;
       userSystem.email = userData.email;
 
       const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(userData.password, salt);
+      const hashPassword = await bcrypt.hash(userData.passwd, salt);
       userSystem.password = hashPassword;
 
+      console.log(userSystem)
       const existsEmail: ResultObject = await this.repository.existsEmail(userSystem.email);
+      console.log('existe email : ', existsEmail)
+      
       if (existsEmail.statusCode === 200) {
         if (!existsEmail.value) {
           const addNewUserSystem: ResultObject = await this.repository.add(userSystem);
-
+          console.log('add new user : ', addNewUserSystem)
           if (addNewUserSystem.statusCode === 200) {
             const getNewUserId = await this.repository.getIdByEmail(userSystem.email);
+            console.log('get new user email : ', getNewUserId)
             if (getNewUserId.statusCode === 200) {
               const getToken = await this.generateToken({ id: getNewUserId.value[0].id });
               // return id of the new user and token
@@ -72,6 +77,7 @@ export default class UserSystemService {
         return existsEmail; // send error
       }
     } catch (ex) {
+      console.log('Exception ',ex)
       return new ResultObject(400, { error: String(ex) });
     }
   }
