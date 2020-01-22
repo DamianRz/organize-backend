@@ -1,6 +1,6 @@
 import Express from 'express';
-import mysqlConfig from '../configuration/MysqlConfig';
-import Logger from '../utils/Logger';
+import mysqlConfig from '../config/MysqlConfig';
+import Logger from '../../utils/Logger';
 
 export default class MysqlConnection {
     public static mysqlConn: any;
@@ -20,7 +20,11 @@ export default class MysqlConnection {
             await this.createConnection();
             // Starting app
             app.listen(mysqlConfig.listenPort, () => {
-                Logger.success('Organize backend is ready');
+                Logger.success('')
+                Logger.success('+++++++++++++++++++++++++');
+                Logger.success('Organize Backend is ready');
+                Logger.success('+++++++++++++++++++++++++');
+                Logger.success('')
             });
         } catch (error) {
             Logger.fatal(error);

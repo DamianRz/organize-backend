@@ -1,8 +1,7 @@
 import UserSystem from '../models/UserSystem';
-import MysqlConnection from '../connection/MysqlConnection';
 import ResultObject from '../models/ResultObject';
-import QueryFunctions from '../queries/QueryFunctions';
-import Queries from '../queries/Queries';
+import QueryFunctions from '../sql/queries/QueryFunctions';
+import Queries, { USER_SYSTEM_TABLE, USER_SYSTEM_QUERIES } from '../sql/queries/Queries';
 
 export default class UserRepository {
   private queryFunctions: QueryFunctions = new QueryFunctions();
@@ -11,13 +10,13 @@ export default class UserRepository {
   // get
   public async get(email: string) {
     const data = [email];
-    return this.queryFunctions.query(this.queries.getQuery('userSystem', 'get'), data);
+    return this.queryFunctions.query(this.queries.getQuery(USER_SYSTEM_TABLE, USER_SYSTEM_QUERIES.GET), data);
   }
 
   // existsEmail
   public async existsEmail(email: string) {
     const data = [email];
-    const exists = await this.queryFunctions.query(this.queries.getQuery('userSystem', 'existsEmail'), data);
+    const exists = await this.queryFunctions.query(this.queries.getQuery(USER_SYSTEM_TABLE, USER_SYSTEM_QUERIES.EXIST_EMAIL), data);
     if (exists.statusCode === 200) {
       if (exists.value[0]) {
         return new ResultObject(200, true);
@@ -32,24 +31,24 @@ export default class UserRepository {
   // add
   public async add(user: UserSystem) {
     const data = [user.username, user.password, user.email];
-    return this.queryFunctions.query(this.queries.getQuery('userSystem', 'add'), data);
+    return this.queryFunctions.query(this.queries.getQuery(USER_SYSTEM_TABLE, USER_SYSTEM_QUERIES.ADD), data);
   }
 
   // getIdByEmail
   public async getIdByEmail(email: string) {
     const data = [email];
-    return this.queryFunctions.query(this.queries.getQuery('userSystem', 'getIdByEmail'), data);
+    return this.queryFunctions.query(this.queries.getQuery(USER_SYSTEM_TABLE, USER_SYSTEM_QUERIES.GET_ID_BY_EMAIL), data);
   }
 
   // save
   public async save(user: UserSystem) {
     const data = [user.username, user.password, user.email, user.id];
-    return this.queryFunctions.query(this.queries.getQuery('userSystem', 'save'), data);
+    return this.queryFunctions.query(this.queries.getQuery(USER_SYSTEM_TABLE, USER_SYSTEM_QUERIES.SAVE), data);
   }
 
   // delete
   public async delete(id: number) {
     const data = [id];
-    return this.queryFunctions.query(this.queries.getQuery('userSystem', 'delete'), data);
+    return this.queryFunctions.query(this.queries.getQuery(USER_SYSTEM_TABLE, USER_SYSTEM_QUERIES.DELETE), data);
   }
 }

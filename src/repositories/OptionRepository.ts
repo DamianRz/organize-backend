@@ -1,9 +1,8 @@
 import Option from '../models/Option';
 import OptionList from '../models/OptionList';
-import MysqlConnection from '../connection/MysqlConnection';
 import ResultObject from '../models/ResultObject';
-import QueryFunctions from '../queries/QueryFunctions';
-import Queries from '../queries/Queries';
+import QueryFunctions from '../sql/queries/QueryFunctions';
+import Queries, { OPTION_TABLE, OPTION_QUERIES } from '../sql/queries/Queries';
 
 export default class JoinEventRepository {
   private queryFunctions: QueryFunctions = new QueryFunctions();
@@ -12,25 +11,25 @@ export default class JoinEventRepository {
   // add
   public async add(o: Option) {
     const data = [o.idUser, o.idQuestion, o.name, o.cost];
-    return this.queryFunctions.action(this.queries.getQuery('option', 'add'), data);
+    return this.queryFunctions.query(this.queries.getQuery(OPTION_TABLE, OPTION_QUERIES.ADD), data);
   }
 
   // linkQuestionnaire
   public async linkQuestionnaire(idOption: number, idQuestionnaire: number) {
     const data = [idOption, idQuestionnaire];
-    return this.queryFunctions.action(this.queries.getQuery('option', 'link'), data);
+    return this.queryFunctions.query(this.queries.getQuery(OPTION_TABLE, OPTION_QUERIES.LINK), data);
   }
 
   // save
   public async save(o: Option) {
     const data = [o.name, o.cost, o.idUser, o.idQuestion, o.id];
-    return this.queryFunctions.action(this.queries.getQuery('option', 'save'), data);
+    return this.queryFunctions.query(this.queries.getQuery(OPTION_TABLE, OPTION_QUERIES.SAVE), data);
   }
 
   // getByIdUser
   public async getByIdUser(idUser: number) {
     const data = [idUser];
-    const rows = await this.queryFunctions.get(this.queries.getQuery('option', 'getByIdUser'), data);
+    const rows = await this.queryFunctions.query(this.queries.getQuery(OPTION_TABLE, OPTION_QUERIES.GET_BY_ID_USER), data);
     if (rows.statusCode === 200) {
       const oList: OptionList = new OptionList();
       rows.value.forEach((item: any) => {
@@ -47,24 +46,24 @@ export default class JoinEventRepository {
   // getIdByIdQuestionnaire
   public async getIdByIdQuestionnaire(idQuestionnaire: number) {
     const data = [idQuestionnaire];
-    return await this.queryFunctions.get(this.queries.getQuery('option', 'getIdByIdQuestionnaire'), data);
+    return await this.queryFunctions.query(this.queries.getQuery(OPTION_TABLE, OPTION_QUERIES.GET_ID_BY_ID_QUESTIONNAIRE), data);
   }
 
   // getId
   public async getId(o: Option) {
     const data = [o.idUser, o.idQuestion, o.name];
-    return await this.queryFunctions.get(this.queries.getQuery('option', 'getId'), data);
+    return await this.queryFunctions.query(this.queries.getQuery(OPTION_TABLE, OPTION_QUERIES.GET_ID), data);
   }
 
   // delete
   public async delete(idOption: number) {
     const data = [idOption];
-    return await this.queryFunctions.action(this.queries.getQuery('option', 'delete'), data);
+    return await this.queryFunctions.query(this.queries.getQuery(OPTION_TABLE, OPTION_QUERIES.DELETE), data);
   }
 
   // deleteRelation
   public async deleteRelation(idOption: number) {
     const data = [idOption];
-    return await this.queryFunctions.action(this.queries.getQuery('option', 'deleteRelation'), data);
+    return await this.queryFunctions.query(this.queries.getQuery(OPTION_TABLE, OPTION_QUERIES.DELETE_RELATION), data);
   }
 }

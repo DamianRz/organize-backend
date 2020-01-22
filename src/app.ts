@@ -2,7 +2,7 @@ import socketIo from 'socket.io';
 import http from 'http';
 import RoutesIo from './routesIO';
 
-import MysqlConnection from './connection/MysqlConnection';
+import MysqlConnection from './sql/connection/MysqlConnection';
 import Routes from './routes';
 import Logger from './utils/Logger';
 import Express, { Application } from 'express';

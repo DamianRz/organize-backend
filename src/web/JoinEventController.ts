@@ -20,7 +20,7 @@ export default class JoinEventController {
     ];
     if (this.utils.validation(body, requiredObjects, response)) {
       const jeData = body.joinData;
-      const result = await this.service.add(jeData);
+      const result = await this.service.add(jeData, jeData.idEvent);
       response.status(result.statusCode).send(result.value);
     }
   }

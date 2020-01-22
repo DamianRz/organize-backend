@@ -1,8 +1,8 @@
 import Question from '../models/Question';
 import QuestionList from '../models/QuestionList';
 import ResultObject from '../models/ResultObject';
-import QueryFunctions from '../queries/QueryFunctions';
-import Queries from '../queries/Queries';
+import QueryFunctions from '../sql/queries/QueryFunctions';
+import Queries, { QUESTION_TABLE, QUESTION_QUERIES } from '../sql/queries/Queries';
 
 export default class QuestionRepository {
   private queryFunctions: QueryFunctions = new QueryFunctions();
@@ -11,19 +11,19 @@ export default class QuestionRepository {
   // add
   public async add(q: Question) {
     const data = [q.idType, q.name, q.category];
-    return this.queryFunctions.action(this.queries.getQuery('question', 'add'), data);
+    return this.queryFunctions.query(this.queries.getQuery(QUESTION_TABLE, QUESTION_QUERIES.ADD), data);
   }
 
   // save
   public async save(q: Question) {
     const data = [q.idType, q.name, q.category, q.id];
-    return this.queryFunctions.action(this.queries.getQuery('question', 'save'), data);
+    return this.queryFunctions.query(this.queries.getQuery(QUESTION_TABLE, QUESTION_QUERIES.SAVE), data);
   }
 
   // getByIdType
   public async getByIdType(idType: number) {
     const data = [idType];
-    const rows = await this.queryFunctions.get(this.queries.getQuery('question', 'getByIdType'), data);
+    const rows = await this.queryFunctions.query(this.queries.getQuery(QUESTION_TABLE, QUESTION_QUERIES.GET_BY_ID_TYPE), data);
     if (rows.statusCode === 200) {
       const qList: QuestionList = new QuestionList();
       rows.value.forEach((item: any) => {
@@ -40,18 +40,18 @@ export default class QuestionRepository {
   // getAll
   public async getAll() {
     const data: any = [];
-    return this.queryFunctions.get(this.queries.getQuery('question', 'getAll'), data);
+    return this.queryFunctions.query(this.queries.getQuery(QUESTION_TABLE, QUESTION_QUERIES.GET_ALL), data);
   }
 
   // getId
   public async getId(q: Question) {
     const data = [q.idType, q.name, q.category];
-    return this.queryFunctions.get(this.queries.getQuery('question', 'getId'), data);
+    return this.queryFunctions.query(this.queries.getQuery(QUESTION_TABLE, QUESTION_QUERIES.GET_ID), data);
   }
 
   // delete
   public async delete(idQuestion: number) {
     const data = [idQuestion];
-    return this.queryFunctions.action(this.queries.getQuery('question', 'delete'), data);
+    return this.queryFunctions.query(this.queries.getQuery(QUESTION_TABLE, QUESTION_QUERIES.DELETE), data);
   }
 }

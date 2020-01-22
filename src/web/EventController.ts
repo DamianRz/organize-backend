@@ -12,7 +12,6 @@ export default class UserController {
   private optionService: OptionService = new OptionService();
   private utils = new Utils();
 
-
   // 'get:joinEvents'
   public async getJoinEvents(data: any, socket: Socket) {
     const requiredObjects: any = {
@@ -27,12 +26,10 @@ export default class UserController {
 
     if (this.utils.validateData(data, requiredObjects, socket)) {
       const jeData = data.joinEvent;
-      const result = await this.service.getJoinEvents(jeData);
+      const result = await this.joinEventService.getJoinEvents(jeData);
       socket.emit('get:joinEvents', result);
     }
   }
-
-
 
   // add
   public async add(data: any, socket: Socket) {

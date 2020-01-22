@@ -34,6 +34,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.6",
     "@types/dotenv": "^6.1.1",
+    "@types/mysql": "^2.15.8",
     "@types/socket.io": "^2.1.4",
     "concurrently": "^5.0.0",
     "nodemon": "^1.19.3"

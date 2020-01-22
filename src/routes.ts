@@ -58,7 +58,7 @@ router
   // .post('/signin', (req: Request, res: Response) => userSystem.signIn(req, res))
   // .post('/signup', (req: Request, res: Response) => userSystem.signUp(req, res))
   .post('/questionnaires/options', (req: Request, res: Response) => option.linkQuestionnaire(req, res))
-  .post('/events/questionnaires',
-    (req: Request, res: Response) => event.linkQuestionnaire(req, res));
+  // .post('/events/questionnaires',
+  //   (req: Request, res: Response) => event.linkQuestionnaire(req, res));
 
 export default router;

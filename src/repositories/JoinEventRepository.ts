@@ -3,9 +3,10 @@ import EventList from '../models/EventList';
 import User from '../models/UserSystem';
 import UserList from '../models/UserList';
 import JoinEvent from '../models/JoinEvent';
-import QueryFunctions from '../queries/QueryFunctions';
-import Queries from '../queries/Queries';
+import QueryFunctions from '../sql/queries/QueryFunctions';
 import ResultObject from '../models/ResultObject';
+import Queries, { JOIN_EVENT_TABLE, JOIN_EVENT_QUERIES } from '../sql/queries/Queries';
+
 
 export default class JoinEventRepository {
   private queryFunctions: QueryFunctions = new QueryFunctions();
@@ -14,25 +15,25 @@ export default class JoinEventRepository {
   // add
   public async add(je: JoinEvent) {
     const data = [je.idUser, je.idEvent, je.idType];
-    return this.queryFunctions.action(this.queries.getQuery('joinEvent', 'add'), data);
+    return this.queryFunctions.query(this.queries.getQuery(JOIN_EVENT_TABLE, JOIN_EVENT_QUERIES.ADD), data);
   }
 
   // setUserType
   public async setUserType(je: JoinEvent) {
     const data = [je.idType, je.idEvent, je.idUser];
-    return this.queryFunctions.action(this.queries.getQuery('joinEvent', 'setUserType'), data);
+    return this.queryFunctions.query(this.queries.getQuery(JOIN_EVENT_TABLE, JOIN_EVENT_QUERIES.SET_USER_TYPE), data);
   }
 
   // delete
   public async delete(idEvent: number) {
     const data = [idEvent];
-    return this.queryFunctions.action(this.queries.getQuery('joinEvent', 'delete'), data);
+    return this.queryFunctions.query(this.queries.getQuery(JOIN_EVENT_TABLE, JOIN_EVENT_QUERIES.DELETE), data);
   }
 
   // getJoinUsers
   public async getJoinUsers(joinEvent: JoinEvent) {
     const data = [joinEvent.idEvent, joinEvent.idType];
-    const rows = await this.queryFunctions.get(this.queries.getQuery('joinEvent', 'getJoinUsers'), data);
+    const rows = await this.queryFunctions.query(this.queries.getQuery(JOIN_EVENT_TABLE, JOIN_EVENT_QUERIES.GET_JOIN_USERS), data);
     if (rows.statusCode === 200) {
       const userList: UserList = new UserList();
       rows.value.forEach((item: any) => {
@@ -49,7 +50,7 @@ export default class JoinEventRepository {
   // getJoinEvents
   public async getJoinEvents(joinEvent: JoinEvent) {
     const data = [joinEvent.idUser, joinEvent.idType];
-    const rows = await this.queryFunctions.get(this.queries.getQuery('joinEvent', 'getJoinEvents'), data); 
+    const rows = await this.queryFunctions.query(this.queries.getQuery(JOIN_EVENT_TABLE, JOIN_EVENT_QUERIES.GET_JOIN_EVENTS), data);
     if (rows.statusCode === 200) {
       const eventList: EventList = new EventList();
       rows.value.forEach((item: any) => {
